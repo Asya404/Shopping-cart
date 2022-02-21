@@ -176,7 +176,7 @@ header {
     border-bottom: 1px solid #bbb;
 }
  .course img {
-     width: 200px;
+     width: 100px;
  }
 
 .remove {
@@ -188,6 +188,10 @@ header {
     text-decoration: none;
     color: white;
     font-weight: bold;
+}
+
+.remove:hover {
+    color: #bbb;
 }
 
 
