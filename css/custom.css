@@ -82,6 +82,11 @@ ul {
     width: 100%;
 }
 
+.clear-cart:hover {
+    color: #fff;
+    background-color: #bbb !important;
+}
+
 .button:hover {
     outline: 0;
     background-color: #1EAEDB;
@@ -198,7 +203,7 @@ header {
 /* HERO */
 
 .hero-content {
-    width: 40%;
+    width: 90%;
     color: #fff;
     position: absolute;
     top: 60%;
@@ -366,4 +371,10 @@ header {
     display: block;
     margin-bottom: 10px;
     text-decoration: none;
+}
+
+@media only screen and (min-width: 480px) {
+   .hero-content {
+        width: 40%;
+    }
 }

@@ -6,10 +6,8 @@ const courses = document.querySelector('.courses-list'),
 
 
 
-
 // Listeners
 loadEventListeners();
-
 function loadEventListeners() {
     courses.addEventListener('click', buyCourse);
     shoppingCartContent.addEventListener('click', removeCourse);
@@ -20,19 +18,18 @@ function loadEventListeners() {
 
 
 
-
 // Functions
+
+// Get target course
 function buyCourse(e) {
     e.preventDefault();
     if (e.target.classList.contains('add-to-cart')) {
-
-        // read the course values
         const course = e.target.parentElement.parentElement.parentElement;
+
         getCourseInfo(course);
     }
 
 }
-
 
 
 // Reads html info of the selected course
@@ -43,12 +40,12 @@ function getCourseInfo(course) {
         price: course.querySelector('.price-new').textContent,
         id: course.querySelector('.add-to-cart').getAttribute('data-id')
     }
+
     addIntoCart(courseInfo);
 }
 
 
-
-// Display the selected course into the shopping cart
+// Create selected course in the shopping cart
 function addIntoCart(course) {
     const div = document.createElement('div');
     div.innerHTML = `
@@ -58,27 +55,24 @@ function addIntoCart(course) {
     <a href="#" class="remove" data-id="${course.id}">X</a>
     `;
     div.classList.add('course');
-
     shoppingCartContent.appendChild(div);
 
     saveIntoStorage(course);
 }
 
 
-
-
-// Add courses into Local Storage
+// Add courses into Local Storage (but first check if it exists)
 function saveIntoStorage(course) {
     let courses = getCoursesFromStorage();
     courses.push(course);
     localStorage.setItem('courses', JSON.stringify(courses))
 }
 
+
 // Get courses from Local Storage
 function getCoursesFromStorage() {
     let courses;
 
-    // if something exists on storage we get the value, otherwise create an empty array
     if (localStorage.getItem('courses') === null) {
         courses = [];
     } else {
@@ -88,20 +82,46 @@ function getCoursesFromStorage() {
 }
 
 
-
-
-// Remove course from the DOM
+// Remove course from the DOM and get target id
 function removeCourse(e) {
+    let courseId;
+
     if (e.target.classList.contains('remove')) {
         e.target.parentElement.remove();
+
+        courseId = e.target.parentElement.querySelector('a').getAttribute('data-id');
     }
+
+    removeCourseLS(courseId);
 }
 
 
+// Check if target id exists in local storage (courseLS.id)
+function removeCourseLS(id) {
+    let coursesLS = getCoursesFromStorage();
 
-// Clears the shopping cart
+    coursesLS.forEach(function(courseLS, index) {
+        if(courseLS.id === id) {
+            coursesLS.splice(index, 1);
+        }
+    });
+
+    // Add the rest of the array
+    localStorage.setItem('courses', JSON.stringify(coursesLS));
+}
+
+
+// Clears the shopping cart DOM
 function clearCart() {
     shoppingCartContent.innerHTML = '';
+
+    clearLocalStorage();
+}
+
+
+// Clear the whole Local Storage
+function clearLocalStorage() {
+    localStorage.clear();
 }
 
 
@@ -121,5 +141,4 @@ function localStorageOnLoad() {
         div.classList.add('course');
         shoppingCartContent.appendChild(div);
     });
-
 }
